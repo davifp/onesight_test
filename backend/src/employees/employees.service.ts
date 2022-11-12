@@ -23,7 +23,7 @@ export class EmployeesService {
     return `This action updates a #${id} employee`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} employee`;
+  remove(id: string) {
+    return this.prisma.employee.delete({ where: { id } });
   }
 }
