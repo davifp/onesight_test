@@ -1,5 +1,19 @@
+import { AiFillEdit } from "react-icons/ai";
 import styles from "./styles.module.scss";
-export const Table: React.FC = () => {
+
+interface ModalProps {
+  openModal: () => void;
+  closeModal: () => void;
+}
+
+export const Table: React.FC<ModalProps> = ({
+  openModal,
+  closeModal,
+}: ModalProps) => {
+  const handleButtonClick = () => {
+    openModal();
+  };
+
   return (
     <table className={styles.table}>
       <thead>
@@ -21,6 +35,11 @@ export const Table: React.FC = () => {
           <td>davipavone@gmail.com</td>
           <td>Brazil</td>
           <td>Front-end Developer</td>
+          <td>
+            <button onClick={handleButtonClick}>
+              <AiFillEdit size={20} color={"#3B50AD"} />
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>
