@@ -1,15 +1,25 @@
 import { AiFillEdit } from "react-icons/ai";
 import styles from "./styles.module.scss";
 
-interface ModalProps {
+interface Props {
   openModal: () => void;
   closeModal: () => void;
+  data: Data[];
 }
 
-export const Table: React.FC<ModalProps> = ({
+interface Data {
+  id: string;
+  name: string;
+  email: string;
+  country: string;
+  title: string;
+}
+
+export const Table: React.FC<Props> = ({
   openModal,
   closeModal,
-}: ModalProps) => {
+  data,
+}: Props) => {
   const handleButtonClick = () => {
     openModal();
   };
@@ -27,20 +37,22 @@ export const Table: React.FC<ModalProps> = ({
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>
-            <input type={"checkbox"} />
-          </td>
-          <td>Davi</td>
-          <td>davipavone@gmail.com</td>
-          <td>Brazil</td>
-          <td>Front-end Developer</td>
-          <td>
-            <button onClick={handleButtonClick}>
-              <AiFillEdit size={20} color={"#3B50AD"} />
-            </button>
-          </td>
-        </tr>
+        {data.map((item) => (
+          <tr key={item.id}>
+            <td>
+              <input type={"checkbox"} />
+            </td>
+            <td>{item.name}</td>
+            <td>{item.email}</td>
+            <td>{item.country}</td>
+            <td>{item.title}</td>
+            <td>
+              <button onClick={handleButtonClick}>
+                <AiFillEdit size={20} color={"#3B50AD"} />
+              </button>
+            </td>
+          </tr>
+        ))}
       </tbody>
     </table>
   );
