@@ -15,8 +15,11 @@ export class EmployeesService {
     return this.prisma.employee.findMany({});
   }
 
-  update(id: number, updateEmployeeDto: UpdateEmployeeDto) {
-    return `This action updates a #${id} employee`;
+  update(id: string, updateEmployeeDto: UpdateEmployeeDto) {
+    return this.prisma.employee.update({
+      where: { id },
+      data: updateEmployeeDto,
+    });
   }
 
   remove(id: string) {
