@@ -2,11 +2,13 @@ import Modal from "react-modal";
 import type { NextPage } from "next";
 import styles from "../styles/Home.module.scss";
 import { Table } from "../components/Table";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { CreateForm } from "../components/CreateForm";
+import { api } from "../services/api";
+import { UpdateForm } from "../components/UpdateForm";
 
 interface Data {
-  id: string;
+  id?: string;
   name: string;
   email: string;
   country: string;
@@ -14,49 +16,66 @@ interface Data {
 }
 
 const Home: NextPage = () => {
-  const data = useMemo(
-    () => [
-      {
-        id: "1",
-        name: "Davi Pavone",
-        email: "davipavone@gmail.com",
-        country: "Brazil",
-        title: "Front-end Developer",
-      },
-      {
-        id: "2",
-        name: "Davi Pavone",
-        email: "davipavone@gmail.com",
-        country: "Brazil",
-        title: "Front-end Developer",
-      },
-      {
-        id: "3",
-        name: "Davi Pavone",
-        email: "davipavone@gmail.com",
-        country: "Brazil",
-        title: "Front-end Developer",
-      },
-    ],
-    []
-  );
-
   const [employee, setEmployee] = useState<Data[]>([]);
+  const [toUpdateEmployee, setToUpdateEmployee] = useState<Data>();
+  const [isUpdateForm, setIsUpdateForm] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [updateTable, setUpdateTable] = useState<any>();
 
   useEffect(() => {
-    setEmployee(data);
-  }, [data]);
+    const getData = async () => {
+      const data = await api.get("employees").then((response) => response.data);
+      setEmployee(data);
+    };
 
-  function handleCreateEmployee(newEmployee: Data) {
-    console.log(newEmployee);
-    data.push(newEmployee);
+    getData();
+  }, [updateTable]);
+
+  async function handleCreateEmployee(newEmployee: Data) {
+    try {
+      await api.post("employees", newEmployee);
+      setUpdateTable(1);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
-  function handleDeleteEmployee(id: string) {
-    console.log(id);
-    const newArray = employee.filter((item) => item.id !== id);
-    setEmployee(newArray);
+  async function handleDeleteEmployee(id: string) {
+    try {
+      await api.delete(`employees/${id}`);
+      setUpdateTable(2);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async function handleDeleteAll() {
+    try {
+      await api.delete("employees");
+      setUpdateTable(3);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async function handleUpdateEmployee(data: Data) {
+    try {
+      await api.patch(`employees/${toUpdateEmployee?.id}`, data);
+      setUpdateTable(4);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  function handleAddToUpdateEmployee(data: Data) {
+    setToUpdateEmployee(data);
+    setIsUpdateForm(true);
+    openModal();
+  }
+
+  function handleCreateButton() {
+    setIsUpdateForm(false);
+    openModal();
   }
 
   function closeModal() {
@@ -70,13 +89,12 @@ const Home: NextPage = () => {
   return (
     <div id="body" className={styles.container}>
       <div className={styles.buttonContainer}>
-        <button>Delete</button>
-        <button onClick={openModal}>Create</button>
+        <button onClick={handleDeleteAll}>Delete</button>
+        <button onClick={handleCreateButton}>Create</button>
       </div>
       <Table
-        openModal={openModal}
-        closeModal={closeModal}
         handleDeleteEmployee={handleDeleteEmployee}
+        handleAddToUpdateEmployee={handleAddToUpdateEmployee}
         data={employee}
       />
       <Modal
@@ -85,7 +103,18 @@ const Home: NextPage = () => {
         onRequestClose={closeModal}
         ariaHideApp={false}
       >
-        <CreateForm handleCreateEmployee={handleCreateEmployee} />
+        {isUpdateForm ? (
+          <UpdateForm
+            handleUpdateEmployee={handleUpdateEmployee}
+            toUpdateEmployee={toUpdateEmployee}
+            closeModal={closeModal}
+          />
+        ) : (
+          <CreateForm
+            handleCreateEmployee={handleCreateEmployee}
+            closeModal={closeModal}
+          />
+        )}
       </Modal>
     </div>
   );

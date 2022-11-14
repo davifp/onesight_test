@@ -6,7 +6,8 @@ interface Props {
   openModal: () => void;
   closeModal: () => void;
   data: Data[];
-  handleDeleteEmployee: () => void;
+  handleDeleteEmployee: (id: string) => void;
+  handleAddToUpdateEmployee: (Employee: Data) => void;
 }
 
 interface Data {
@@ -18,15 +19,10 @@ interface Data {
 }
 
 export const Table: React.FC<Props> = ({
-  openModal,
-  closeModal,
   data,
   handleDeleteEmployee,
+  handleAddToUpdateEmployee,
 }: Props) => {
-  const handleButtonClick = () => {
-    openModal();
-  };
-
   return (
     <table className={styles.table}>
       <thead>
@@ -35,7 +31,7 @@ export const Table: React.FC<Props> = ({
           <th>E-mail</th>
           <th>Country</th>
           <th>Job Title</th>
-          <th>Actions</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -46,7 +42,7 @@ export const Table: React.FC<Props> = ({
             <td>{item.country}</td>
             <td>{item.title}</td>
             <td>
-              <button onClick={handleButtonClick}>
+              <button onClick={() => handleAddToUpdateEmployee(item)}>
                 <AiFillEdit size={20} color={"#3B50AD"} />
               </button>
               <button

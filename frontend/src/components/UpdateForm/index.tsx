@@ -10,13 +10,15 @@ interface Data {
 }
 
 interface Props {
-  handleCreateEmployee: (data: Data) => void;
+  handleUpdateEmployee: (data: Data) => void;
   closeModal: () => void;
+  toUpdateEmployee: Data;
 }
 
-export const CreateForm: React.FC<Props> = ({
-  handleCreateEmployee,
+export const UpdateForm: React.FC<Props> = ({
+  handleUpdateEmployee,
   closeModal,
+  toUpdateEmployee,
 }) => {
   const formSchema = Yup.object({
     name: Yup.string()
@@ -29,14 +31,19 @@ export const CreateForm: React.FC<Props> = ({
 
   return (
     <>
-      <h1 className={styles.title}>Add a new employee</h1>
+      <h1 className={styles.title}>Update a employee</h1>
 
       <Formik
         className={styles.container}
-        initialValues={{ name: "", email: "", country: "", title: "" }}
+        initialValues={{
+          name: toUpdateEmployee.name,
+          email: toUpdateEmployee.email,
+          country: toUpdateEmployee.country,
+          title: toUpdateEmployee.title,
+        }}
         validationSchema={formSchema}
         onSubmit={(data: Data, { resetForm }: any) => {
-          handleCreateEmployee(data);
+          handleUpdateEmployee(data);
           closeModal();
         }}
       >
