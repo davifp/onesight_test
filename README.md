@@ -1,4 +1,4 @@
-Project developed with Next.js, Nest.js and Postgres database.
+Simple CRUD project developed with Next.js, Nest.js and Postgres database.
 
 ---
 
