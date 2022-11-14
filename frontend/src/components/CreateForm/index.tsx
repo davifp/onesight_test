@@ -19,17 +19,6 @@ export const CreateForm: React.FC<Props> = ({ handleCreateEmployee }) => {
   const [data, setData] = useState<Data>();
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const handleSubmit = async (data: Data, resetForm: any) => {
-    console.log(data);
-    try {
-      setData(data);
-      resetForm();
-      setIsSuccess(true);
-    } catch (err: any) {
-      setDataError(err);
-    }
-  };
-
   const formSchema = Yup.object({
     name: Yup.string()
       .min(3, "name should contain at least 3 characteres")

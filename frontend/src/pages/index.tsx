@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import { CreateForm } from "../components/CreateForm";
 
 interface Data {
+  id: string;
   name: string;
   email: string;
   country: string;
@@ -40,16 +41,22 @@ const Home: NextPage = () => {
     []
   );
 
-  const [datas, setDatas] = useState<Data[]>([]);
+  const [employee, setEmployee] = useState<Data[]>([]);
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    setDatas(data);
+    setEmployee(data);
   }, [data]);
 
   function handleCreateEmployee(newEmployee: Data) {
-    console.log("hey");
+    console.log(newEmployee);
     data.push(newEmployee);
+  }
+
+  function handleDeleteEmployee(id: string) {
+    console.log(id);
+    const newArray = employee.filter((item) => item.id !== id);
+    setEmployee(newArray);
   }
 
   function closeModal() {
@@ -62,7 +69,16 @@ const Home: NextPage = () => {
 
   return (
     <div id="body" className={styles.container}>
-      <Table openModal={openModal} closeModal={closeModal} data={data} />
+      <div className={styles.buttonContainer}>
+        <button>Delete</button>
+        <button onClick={openModal}>Create</button>
+      </div>
+      <Table
+        openModal={openModal}
+        closeModal={closeModal}
+        handleDeleteEmployee={handleDeleteEmployee}
+        data={employee}
+      />
       <Modal
         className={styles.modalContainer}
         isOpen={isOpen}
