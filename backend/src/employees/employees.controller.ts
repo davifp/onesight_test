@@ -25,11 +25,6 @@ export class EmployeesController {
     return this.employeesService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.employeesService.findOne(+id);
-  }
-
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -41,5 +36,10 @@ export class EmployeesController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.employeesService.remove(id);
+  }
+
+  @Delete()
+  removeAll() {
+    return this.employeesService.removeAll();
   }
 }

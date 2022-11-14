@@ -15,15 +15,15 @@ export class EmployeesService {
     return this.prisma.employee.findMany({});
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} employee`;
-  }
-
   update(id: number, updateEmployeeDto: UpdateEmployeeDto) {
     return `This action updates a #${id} employee`;
   }
 
   remove(id: string) {
     return this.prisma.employee.delete({ where: { id } });
+  }
+
+  removeAll() {
+    return this.prisma.employee.deleteMany();
   }
 }
