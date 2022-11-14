@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { CreateForm } from "../components/CreateForm";
 import { api } from "../services/api";
 import { UpdateForm } from "../components/UpdateForm";
+import { Button } from "../components/Button";
 
 interface Data {
   id?: string;
@@ -88,15 +89,16 @@ const Home: NextPage = () => {
 
   return (
     <div id="body" className={styles.container}>
-      <div className={styles.buttonContainer}>
-        <button onClick={handleDeleteAll}>Delete</button>
-        <button onClick={handleCreateButton}>Create</button>
+      <div className={styles.tableContainer}>
+        <Button onClickFunction={handleCreateButton} buttonName={"Create"} />
+        <Button onClickFunction={handleDeleteAll} buttonName={"Delete All"} />
+
+        <Table
+          handleDeleteEmployee={handleDeleteEmployee}
+          handleAddToUpdateEmployee={handleAddToUpdateEmployee}
+          data={employee}
+        />
       </div>
-      <Table
-        handleDeleteEmployee={handleDeleteEmployee}
-        handleAddToUpdateEmployee={handleAddToUpdateEmployee}
-        data={employee}
-      />
       <Modal
         className={styles.modalContainer}
         isOpen={isOpen}
